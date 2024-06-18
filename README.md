@@ -143,4 +143,4 @@ Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged 
 
 ## Contributing
 
-Pull requests are welcome, as is feedback and [reporting issues](https://github.com/blinktaginc/gtfs-accessibility-validator/issues).
+Pull requests are welcome, as is feedback and [reporting issues](https://github.com/BlinkTagInc/gtfs-accessibilty-validator/issues).
