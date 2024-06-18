@@ -1,11 +1,31 @@
 import { openDb, importGtfs } from 'gtfs';
+import { compact } from 'lodash-es';
+// @ts-ignore
 import ColorContrastChecker from 'color-contrast-checker';
 import { log, logWarning, logError, logStats } from './log-utils.js';
 import { setDefaultConfig } from './utils.js';
 
 const ccc = new ColorContrastChecker();
 
-const validateTripsWithaccessibilityInfo = (config) => {
+interface IConfig {
+  sqlitePath?: string;
+  gtfsPath?: string;
+  gtfsUrl?: string;
+  skipImport?: boolean;
+  log?: (text: string, overwrite?: boolean) => void;
+  logWarning?: (text: string) => void;
+  logError?: (text: string) => void;
+}
+
+interface IRoute {
+  route_id: string;
+  route_short_name?: string;
+  route_long_name?: string;
+  route_color?: string;
+  route_text_color?: string;
+}
+
+const validateTripsWithaccessibilityInfo = (config: IConfig) => {
   const db = openDb(config);
 
   const totalTripCount = db.prepare(`SELECT count(*) FROM trips`).get();
@@ -17,7 +37,7 @@ const validateTripsWithaccessibilityInfo = (config) => {
   return wheelchairAccessibleTripCount['count(*)'] / totalTripCount['count(*)'];
 };
 
-const validateStopsWithaccessibilityInfo = (config) => {
+const validateStopsWithaccessibilityInfo = (config: IConfig) => {
   const db = openDb(config);
 
   const totalStopCount = db.prepare(`SELECT count(*) FROM stops`).get();
@@ -27,7 +47,7 @@ const validateStopsWithaccessibilityInfo = (config) => {
   return wheelchairAccessibleStopCount['count(*)'] / totalStopCount['count(*)'];
 };
 
-const validateStopsWithTTS = (config) => {
+const validateStopsWithTTS = (config: IConfig) => {
   const db = openDb(config);
 
   const totalStopCount = db.prepare(`SELECT count(*) FROM stops`).get();
@@ -37,55 +57,54 @@ const validateStopsWithTTS = (config) => {
   return stopsWithTTSCount['count(*)'] / totalStopCount['count(*)'];
 };
 
-const validateLevels = (config) => {
+const validateLevels = (config: IConfig) => {
   const db = openDb(config);
 
   const levels = db.prepare(`SELECT * FROM levels`).all();
   return levels.length > 0;
 };
 
-const validatePathways = (config) => {
+const validatePathways = (config: IConfig) => {
   const db = openDb(config);
 
   const pathways = db.prepare(`SELECT * FROM pathways`).all();
   return pathways.length > 0;
 };
 
-const validateRouteColorContrast = (config) => {
+const validateRouteColorContrast = (config: IConfig) => {
   const db = openDb(config);
 
-  const routes = db
+  const routes: IRoute[] = db
     .prepare(
       `SELECT route_id, route_short_name, route_long_name, route_color, route_text_color FROM routes`,
     )
     .all();
-  const routeColorContrast = routes.map((route) => {
-    if (!route.route_color || !route.route_text_color) {
-      return {
-        ...route,
-      };
-    }
-    return {
-      ...route,
-      validContrast: ccc.isLevelAA(
+
+  return compact(
+    routes.map((route) => {
+      if (!route.route_color || !route.route_text_color) {
+        return;
+      }
+
+      const contrastIsValid = ccc.isLevelAA(
         `#${route.route_text_color}`,
         `#${route.route_color}`,
         19,
-      ),
-    };
-  });
+      );
 
-  const routesWithInvalidContrast = routeColorContrast.filter(
-    (route) => route.validContrast === false,
+      if (contrastIsValid) {
+        return;
+      }
+
+      return route;
+    }),
   );
-
-  return routesWithInvalidContrast;
 };
 
 /*
  * Validate GTFS Accessibility
  */
-export const gtfsAccessibilityValidator = async (initialConfig) => {
+export const gtfsAccessibilityValidator = async (initialConfig: IConfig) => {
   const config = setDefaultConfig(initialConfig);
   config.log = log(config);
   config.logWarning = logWarning(config);
@@ -93,8 +112,8 @@ export const gtfsAccessibilityValidator = async (initialConfig) => {
 
   try {
     openDb(config);
-  } catch (error) {
-    if (error instanceof Error && error.code === 'SQLITE_CANTOPEN') {
+  } catch (error: any) {
+    if (error?.code === 'SQLITE_CANTOPEN') {
       config.logError(
         `Unable to open sqlite database "${config.sqlitePath}" defined as \`sqlitePath\` config.json. Ensure the parent directory exists or remove \`sqlitePath\` from config.json.`,
       );

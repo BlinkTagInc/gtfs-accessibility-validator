@@ -3,14 +3,14 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import PrettyError from 'pretty-error';
+import { isNil, omitBy } from 'lodash-es';
 
 import { formatError } from '../lib/log-utils.js';
 import gtfsAccessibilityValidator from '../index.js';
-import { isNil, omitBy } from 'lodash-es';
 
 const pe = new PrettyError();
 
-const { argv } = yargs(hideBin(process.argv))
+const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 --gtfsPath /path/to/gtfs.zip')
   .help()
   .option('gtfsPath', {
@@ -31,9 +31,10 @@ const { argv } = yargs(hideBin(process.argv))
     describe: 'Path to SQLite database',
     type: 'string',
   })
-  .default('sqlitePath', undefined);
+  .default('sqlitePath', undefined)
+  .parseSync();
 
-const handleError = (error) => {
+const handleError = (error: any) => {
   const text = error || 'Unknown Error';
   process.stdout.write(`\n${formatError(text)}\n`);
   console.error(pe.render(error));
