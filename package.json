@@ -1,0 +1,63 @@
+{
+  "name": "gtfs-accessibility-validator",
+  "version": "0.1.0",
+  "description": "Test GTFS for accessibility information",
+  "keywords": [
+    "transit",
+    "gtfs",
+    "transportation",
+    "accessibility"
+  ],
+  "bugs": {
+    "url": "https://github.com/blinktaginc/gtfs-accessibility-validator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/blinktaginc/gtfs-accessibility-validator.git"
+  },
+  "license": "MIT",
+  "author": "Brendan Nee <brendan@blinktag.com>",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "gtfs-accessibility-validator": "bin/gtfs-accessibility-validator.js"
+  },
+  "dependencies": {
+    "cli-table": "^0.3.11",
+    "color-contrast-checker": "^2.1.0",
+    "gtfs": "^4.12.0",
+    "lodash-es": "^4.17.21",
+    "pretty-error": "^4.0.0",
+    "yargs": "^17.7.2",
+    "yoctocolors": "^2.0.2"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2"
+  },
+  "engines": {
+    "node": ">= 20.11.0"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/keep-a-changelog": {
+        "filename": "CHANGELOG.md"
+      }
+    }
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "lint-staged": {
+    "*.js": "prettier --write",
+    "*.ts": "prettier --write",
+    "*.json": "prettier --write"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}
