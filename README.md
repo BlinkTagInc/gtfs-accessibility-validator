@@ -5,7 +5,7 @@
   <a href="#options">Configuration</a> 
   ⬅️
   <br /><br />
-  <img src="docs/images/gtfs-accessibility-validator-logo.svg" alt="GTFS accessibility Validator" />
+  <img src="docs/images/gtfs-accessibility-validator-logo.svg" alt="GTFS Accessibility Validator" />
   <br /><br />
   <a href="https://www.npmjs.com/package/gtfs-accessibility-validator" rel="nofollow"><img src="https://img.shields.io/npm/v/gtfs-accessibility-validator.svg?style=flat" style="max-width: 100%;"></a>
   <a href="https://www.npmjs.com/package/gtfs-accessibility-validator" rel="nofollow"><img src="https://img.shields.io/npm/dm/gtfs-accessibility-validator.svg?style=flat" style="max-width: 100%;"></a>
@@ -30,6 +30,10 @@ It checks for:
 * Contrast level between `route_color` and `route_text_color` in `routes.txt`
 
 These accessibility guidelines are taken from the [California Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines-v3_0#section-checklist) published by Caltrans.
+
+<img src="docs/images/gtfs-accessibility-validator-output.jpg" alt="GTFS Accessibility Validator Example Output" />
+
+*Example output from GTFS Accessibility Validator*
 
 ### `wheelchair_accessible` field in `trips.txt`
 **Guideline:** The wheelchair_boarding field has a valid, non-empty, and non-null value for every entry in the stops.txt file.
