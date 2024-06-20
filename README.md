@@ -53,6 +53,8 @@ Audio annunciation of stop names is an important wayfinding tool for transit rid
 
 Transit providers should support the ability of these riders to conveniently and accurately plan and take trips on transit by ensuring that stop names will be pronounced correctly in trip-planning applications.
 
+BlinkTag created a different open source tool to review GTFS stop name pronunciations and determine which stops need a tts_stop_name value. [See GTFS Text-to-Speech Tester](https://github.com/BlinkTagInc/gtfs-tts).
+
 ### `levels.txt` and `pathways.txt` files
 **Guideline:** Sufficient data is included within stops.txt, pathways.txt, and levels.txt to navigate to, from, and between any boarding zone to street level with varying physical abilities, including pathway_mode and stair_count where applicable. This includes but is not limited to any stops that use parent_station in stops.txt as well as all significant or named transit facilities where an infrequent visitor may be concerned about accessibility.
 
