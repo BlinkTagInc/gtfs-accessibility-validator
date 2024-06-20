@@ -1,6 +1,6 @@
 {
   "name": "gtfs-accessibility-validator",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Test GTFS for accessibility information",
   "keywords": [
     "transit",
