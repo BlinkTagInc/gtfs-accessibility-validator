@@ -181,8 +181,11 @@ export const gtfsAccessibilityValidator = async (initialConfig: IConfig) => {
   if (routesWithInvalidContrast.length > 0) {
     config.log(
       `Routes with invalid color contrast: ${routesWithInvalidContrast.map((route) => route.route_short_name ?? route.route_long_name).join(', ')}`,
+      true,
     );
   }
+
+  config.log('');
 
   return outputStats;
 };

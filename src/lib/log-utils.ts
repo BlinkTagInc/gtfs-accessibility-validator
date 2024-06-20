@@ -25,7 +25,7 @@ export function log(config) {
       process.stdout.write('\n');
     }
 
-    process.stdout.write(text);
+    process.stdout.write(`${text}\n`);
   };
 }
 
