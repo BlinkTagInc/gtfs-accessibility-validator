@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 - Skip importing unneeded files
 
+### Added
+- Agency and feed info to output
+
 ## [0.2.0] - 2024-07-12
 
 ### Updated

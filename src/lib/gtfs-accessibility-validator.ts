@@ -1,4 +1,4 @@
-import { openDb, importGtfs } from 'gtfs';
+import { openDb, importGtfs, getAgencies, getFeedInfo } from 'gtfs';
 import { compact } from 'lodash-es';
 // @ts-ignore
 import ColorContrastChecker from 'color-contrast-checker';
@@ -173,8 +173,14 @@ export const gtfsAccessibilityValidator = async (initialConfig: IConfig) => {
   const hasLevels = validateLevels(config);
   const hasPathways = validatePathways(config);
   const routesWithInvalidContrast = validateRouteColorContrast(config);
+  const agencies = getAgencies({}, ['agency_name']);
+  const feedInfos = getFeedInfo({}, [
+    'feed_start_date',
+    'feed_end_date',
+    'feed_version',
+  ]);
 
-  const outputStats = [
+  const stats = [
     {
       name: 'Percentage of trips with wheelchair accessibility info',
       value: formatPercent(percentageTripsWithAccessibilityInfo),
@@ -208,18 +214,40 @@ export const gtfsAccessibilityValidator = async (initialConfig: IConfig) => {
     },
   ];
 
-  logStats(outputStats, config);
+  logStats(stats, config);
 
   if (routesWithInvalidContrast.length > 0) {
     config.log(
       `Routes with invalid color contrast: ${routesWithInvalidContrast.map((route) => route.route_short_name ?? route.route_long_name).join(', ')}`,
       true,
     );
+    config.log('', true);
   }
 
-  config.log('');
+  const agencyName = agencies.map((agency) => agency.agency_name).join(', ');
+  const feedVersion = feedInfos
+    .map((feedInfo) => feedInfo.feed_version)
+    .join(', ');
+  const feedStartDate = feedInfos
+    .map((feedInfo) => feedInfo.feed_start_date)
+    .join(', ');
+  const feedEndDate = feedInfos
+    .map((feedInfo) => feedInfo.feed_end_date)
+    .join(', ');
 
-  return outputStats;
+  config.log(`Agency: ${agencyName}`, true);
+  config.log(`Feed Version: ${feedVersion}`, true);
+  config.log(`Feed Start Date: ${feedStartDate}`, true);
+  config.log(`Feed End Date: ${feedEndDate}`, true);
+  config.log('', true);
+
+  return {
+    stats,
+    agency: agencyName,
+    feed_version: feedVersion,
+    feed_start_date: feedStartDate,
+    feed_end_date: feedEndDate,
+  };
 };
 
 export default gtfsAccessibilityValidator;
