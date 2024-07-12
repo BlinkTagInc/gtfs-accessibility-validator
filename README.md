@@ -31,6 +31,8 @@ It checks for:
 
 These accessibility guidelines are taken from the [California Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines-v3_0#section-checklist) published by Caltrans.
 
+> :bulb: **Hosted Web Version Available**: A web-based version of this validator is available at [https://validator.blinktag.com](https://validator.blinktag.com)
+
 <img src="docs/images/gtfs-accessibility-validator-output.jpg" alt="GTFS Accessibility Validator Example Output" />
 
 *Example output from GTFS Accessibility Validator*
@@ -83,6 +85,8 @@ Or you can use it directly via npx:
 If you are using this as a node module as part of an application, you can include it in your project's `package.json` file.
 
 ## Quick Start
+
+There are three ways to use the Accessibility Validator: [the web-based version](https://validator.blinktag.com), as a command-line utility, or as part of a node.js app.
 
 ### Command-line example
 
@@ -148,4 +152,4 @@ Skips importing GTFS into SQLite. Useful if you are rerunning with an unchanged 
 
 ## Contributing
 
-Pull requests are welcome, as is feedback and [reporting issues](https://github.com/BlinkTagInc/gtfs-accessibilty-validator/issues).
+Pull requests are welcome, as is feedback and [reporting issues](https://github.com/BlinkTagInc/gtfs-accessibility-validator/issues).
