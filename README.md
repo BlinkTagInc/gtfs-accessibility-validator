@@ -27,7 +27,7 @@ It checks for:
 * `tts_stop_name` field in `stops.txt`
 * `levels.txt` file
 * `pathways.txt` file
-* Contrast level between `route_color` and `route_text_color` in `routes.txt`
+* Contrast ratio between `route_color` and `route_text_color` in `routes.txt`
 
 These accessibility guidelines are taken from the [California Transit Data Guidelines](https://dot.ca.gov/cal-itp/california-transit-data-guidelines-v3_0#section-checklist) published by Caltrans.
 
@@ -36,40 +36,39 @@ These accessibility guidelines are taken from the [California Transit Data Guide
 *Example output from GTFS Accessibility Validator*
 
 ### `wheelchair_accessible` field in `trips.txt`
-**Guideline:** The wheelchair_boarding field has a valid, non-empty, and non-null value for every entry in the stops.txt file.
+**Guideline:** The `wheelchair_boarding` field has a valid, non-empty, and non-null value for every entry in the `stops.txt` file.
 
 Transit riders with wheelchairs and other mobility aids encounter distinct challenges in accessing transit, including uncertainty as to whether they can board and alight at particular locations using their devices.
 
 Transit providers should support the ability of these riders to plan and take trips on transit by publishing information about the locations where wheelchair users can and cannot access the system in trip-planning applications.
 
 ### `wheelchair_boarding` field in `stops.txt`
-**Guideline:** The wheelchair_accessible field has a valid, non-empty, and non-null value for every entry in the trips.txt file.
+**Guideline:** The `wheelchair_accessible` field has a valid, non-empty, and non-null value for every entry in the `trips.txt` file.
 
 Transit riders with wheelchairs and other mobility aids encounter distinct challenges in accessing transit, including the uncertainty as to whether their devices can be used on specific scheduled trips.
-
 
 Transit providers should support the ability of these riders to plan and take trips on transit by publishing information about the trips on which wheelchair users may or may not be able to travel in trip-planning applications.
 
 ### `tts_stop_name` field in `stops.txt`
-**Guideline:** The tts_stop_name field should include correct pronunciation for all stop names in stops.txt that are commonly mispronounced in trip-planning applications.
+**Guideline:** The `tts_stop_name` field should include correct pronunciation for all stop names in `stops.txt` that are commonly mispronounced in trip-planning applications.
 
 Audio annunciation of stop names is an important wayfinding tool for transit riders with visual impairments.
 
 Transit providers should support the ability of these riders to conveniently and accurately plan and take trips on transit by ensuring that stop names will be pronounced correctly in trip-planning applications.
 
-BlinkTag created a different open source tool to review GTFS stop name pronunciations and determine which stops need a tts_stop_name value. [See GTFS Text-to-Speech Tester](https://github.com/BlinkTagInc/gtfs-tts).
+BlinkTag created a different open source tool to review GTFS stop name pronunciations and determine which stops need a `tts_stop_name` value. [See GTFS Text-to-Speech Tester](https://github.com/BlinkTagInc/gtfs-tts).
 
 ### `levels.txt` and `pathways.txt` files
-**Guideline:** Sufficient data is included within stops.txt, pathways.txt, and levels.txt to navigate to, from, and between any boarding zone to street level with varying physical abilities, including pathway_mode and stair_count where applicable. This includes but is not limited to any stops that use parent_station in stops.txt as well as all significant or named transit facilities where an infrequent visitor may be concerned about accessibility.
+**Guideline:** Sufficient data is included within `stops.txt`, `pathways.txt`, and `levels.txt` to navigate to, from, and between any boarding zone to street level with varying physical abilities, including `pathway_mode` and `stair_count` where applicable. This includes but is not limited to any stops that use `parent_station` in `stops.txt` as well as all significant or named transit facilities where an infrequent visitor may be concerned about accessibility.
 
 Transit riders with wheelchairs and other mobility aids encounter distinct challenges in accessing transit, including uncertainty about navigating between boarding zones and street level at stops.
 
 Transit providers should support the ability of these riders to plan and take trips on transit by providing sufficient information for them to find accessible paths on and off transit using mobile applications.
 
-### Contrast level between `route_color` and `route_text_color` in `routes.txt`
+### Contrast ratio between `route_color` and `route_text_color` in `routes.txt`
 **Guideline:** WCAG AA Large Text Contrast
 
-Routes are often identified using the `route_color` field in routes.txt.  Often, the route_short_name is used as text on top of the `route_color` using the `route_text_color`.
+Routes are often identified using the `route_color` field in routes.txt. Often, the `route_short_name` is used as text on top of the `route_color` using the `route_text_color`.
 
 ## Installation
 
@@ -102,13 +101,13 @@ If installed globally:
 ### Code example
 
 ```js
-import gtfsAccessibilityChecker from 'gtfs-accessibility-checker';
+import gtfsAccessibilityValidator from 'gtfs-accessibility-validator';
 
 const config = {
   gtfsPath: '/path/to/gtfs'
 }
 
-gtfsAccessibilityChecker(config)
+gtfsAccessibilityValidator(config)
   .then((outputStatus) => {
     console.log(outputStats);
   })
