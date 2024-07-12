@@ -3,8 +3,6 @@ import { noop } from 'lodash-es';
 import * as colors from 'yoctocolors';
 import Table from 'cli-table';
 
-import { formatPercent } from './formatters.js';
-
 /*
  * Returns a log function based on config settings
  */
@@ -84,7 +82,7 @@ export function logStats(stats, config) {
     return;
   }
 
-  const formatStatus = (status) => {
+  const formatStatus = (status: string) => {
     if (status === 'pass') {
       return colors.green('✔ pass');
     } else if (status === 'fail') {
@@ -99,34 +97,9 @@ export function logStats(stats, config) {
     head: ['Status', 'Item', 'Value'],
   });
 
-  table.push(
-    [
-      formatStatus(stats.trips_with_wheelchair_accessibility.status),
-      'Percentage of trips with wheelchair accessibility info',
-      formatPercent(stats.trips_with_wheelchair_accessibility.value),
-    ],
-    [
-      formatStatus(stats.stops_with_wheelchair_boarding.status),
-      'Percentage of stops with wheelchair boarding info',
-      formatPercent(stats.stops_with_wheelchair_boarding.value),
-    ],
-    [
-      formatStatus(stats.stops_with_tts.status),
-      'Stops use tts_stop_name field',
-      stats.stops_with_tts.value,
-    ],
-    [formatStatus(stats.levels.status), 'Has levels.txt', stats.levels.value],
-    [
-      formatStatus(stats.pathways.status),
-      'Has pathways.txt',
-      stats.pathways.value,
-    ],
-    [
-      formatStatus(stats.routes_with_invalid_color_contrast.status),
-      'Routes with invalid color contrast',
-      stats.routes_with_invalid_color_contrast.value,
-    ],
-  );
+  for (const stat of stats) {
+    table.push([formatStatus(stat.status), stat.name, stat.value]);
+  }
 
   config.log(table.toString());
 }

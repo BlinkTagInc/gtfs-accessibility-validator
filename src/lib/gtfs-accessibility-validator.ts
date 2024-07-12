@@ -4,6 +4,7 @@ import { compact } from 'lodash-es';
 import ColorContrastChecker from 'color-contrast-checker';
 import { log, logWarning, logError, logStats } from './log-utils.js';
 import { setDefaultConfig } from './utils.js';
+import { formatPercent } from './formatters.js';
 
 const ccc = new ColorContrastChecker();
 
@@ -148,33 +149,39 @@ export const gtfsAccessibilityValidator = async (initialConfig: IConfig) => {
   const hasPathways = validatePathways(config);
   const routesWithInvalidContrast = validateRouteColorContrast(config);
 
-  const outputStats = {
-    trips_with_wheelchair_accessibility: {
-      value: percentageTripsWithAccessibilityInfo,
+  const outputStats = [
+    {
+      name: 'Percentage of trips with wheelchair accessibility info',
+      value: formatPercent(percentageTripsWithAccessibilityInfo),
       status: percentageTripsWithAccessibilityInfo === 1 ? 'pass' : 'fail',
     },
-    stops_with_wheelchair_boarding: {
-      value: percentageOfStopsWithaccessibilityInfo,
+    {
+      name: 'Percentage of stops with wheelchair boarding info',
+      value: formatPercent(percentageOfStopsWithaccessibilityInfo),
       status: percentageOfStopsWithaccessibilityInfo === 1 ? 'pass' : 'fail',
     },
-    stops_with_tts: {
-      value: numberOfStopsWithTTS > 0 ? '✔' : '✘',
+    {
+      name: 'Stops have text-to-speech value',
+      value: numberOfStopsWithTTS > 0 ? 'yes' : 'no',
       status: numberOfStopsWithTTS > 0 ? 'pass' : 'fail',
     },
-    levels: {
-      value: hasLevels ? '✔' : '✘',
+    {
+      name: 'Has levels info',
+      value: hasLevels ? 'yes' : 'no',
       status: hasLevels ? 'pass' : 'fail',
     },
-    pathways: {
-      value: hasPathways ? '✔' : '✘',
+    {
+      name: 'Has pathways info',
+      value: hasPathways ? 'yes' : 'no',
       status: hasPathways ? 'pass' : 'fail',
     },
-    routes_with_invalid_color_contrast: {
-      value: routesWithInvalidContrast.length,
+    {
+      name: 'Routes with invalid color contrast',
+      value: `${routesWithInvalidContrast.length} routes`,
       status: routesWithInvalidContrast.length === 0 ? 'pass' : 'fail',
-      routesWithInvalidContrast,
+      routes: routesWithInvalidContrast,
     },
-  };
+  ];
 
   logStats(outputStats, config);
 
