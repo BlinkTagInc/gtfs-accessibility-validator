@@ -10,12 +10,14 @@ const ccc = new ColorContrastChecker();
 
 interface IConfig {
   sqlitePath?: string;
+  ignoreDuplicates?: boolean;
+  downloadTimeout?: number;
+  ignoreErrors?: boolean;
+  verbose?: boolean;
+  logFunction?: (text: string, overwrite?: boolean) => void;
   gtfsPath?: string;
   gtfsUrl?: string;
   skipImport?: boolean;
-  log?: (text: string, overwrite?: boolean) => void;
-  logWarning?: (text: string) => void;
-  logError?: (text: string) => void;
 }
 
 interface IRoute {
