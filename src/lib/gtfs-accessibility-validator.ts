@@ -184,31 +184,37 @@ export const gtfsAccessibilityValidator = async (initialConfig: IConfig) => {
 
   const stats = [
     {
+      id: 'tripsWithWheelchairAccessibility',
       name: 'Percentage of trips with wheelchair accessibility info',
       value: formatPercent(percentageTripsWithAccessibilityInfo),
       status: percentageTripsWithAccessibilityInfo === 1 ? 'pass' : 'fail',
     },
     {
+      id: 'stopsWithWheelchairBoarding',
       name: 'Percentage of stops with wheelchair boarding info',
       value: formatPercent(percentageOfStopsWithaccessibilityInfo),
       status: percentageOfStopsWithaccessibilityInfo === 1 ? 'pass' : 'fail',
     },
     {
+      id: 'stopsWithTTSStopName',
       name: 'Stops have text-to-speech value',
       value: numberOfStopsWithTTS > 0 ? 'yes' : 'no',
       status: numberOfStopsWithTTS > 0 ? 'pass' : 'fail',
     },
     {
+      id: 'hasLevels',
       name: 'Has levels info',
       value: hasLevels ? 'yes' : 'no',
       status: hasLevels ? 'pass' : 'fail',
     },
     {
+      id: 'hasPathways',
       name: 'Has pathways info',
       value: hasPathways ? 'yes' : 'no',
       status: hasPathways ? 'pass' : 'fail',
     },
     {
+      id: 'routeColorContrastIsValid',
       name: 'Routes with invalid color contrast',
       value: `${routesWithInvalidContrast.length} routes`,
       status: routesWithInvalidContrast.length === 0 ? 'pass' : 'fail',
