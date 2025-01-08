@@ -38,18 +38,18 @@ These accessibility guidelines are taken from the [California Transit Data Guide
 *Example output from GTFS Accessibility Validator*
 
 ### `wheelchair_accessible` field in `trips.txt`
-**Guideline:** The `wheelchair_boarding` field has a valid, non-empty, and non-null value for every entry in the `stops.txt` file.
-
-Transit riders with wheelchairs and other mobility aids encounter distinct challenges in accessing transit, including uncertainty as to whether they can board and alight at particular locations using their devices.
-
-Transit providers should support the ability of these riders to plan and take trips on transit by publishing information about the locations where wheelchair users can and cannot access the system in trip-planning applications.
-
-### `wheelchair_boarding` field in `stops.txt`
 **Guideline:** The `wheelchair_accessible` field has a valid, non-empty, and non-null value for every entry in the `trips.txt` file.
 
 Transit riders with wheelchairs and other mobility aids encounter distinct challenges in accessing transit, including the uncertainty as to whether their devices can be used on specific scheduled trips.
 
 Transit providers should support the ability of these riders to plan and take trips on transit by publishing information about the trips on which wheelchair users may or may not be able to travel in trip-planning applications.
+
+### `wheelchair_boarding` field in `stops.txt`
+**Guideline:** The `wheelchair_boarding` field has a valid, non-empty, and non-null value for every entry in the `stops.txt` file.
+
+Transit riders with wheelchairs and other mobility aids encounter distinct challenges in accessing transit, including uncertainty as to whether they can board and alight at particular locations using their devices.
+
+Transit providers should support the ability of these riders to plan and take trips on transit by publishing information about the locations where wheelchair users can and cannot access the system in trip-planning applications.
 
 ### `tts_stop_name` field in `stops.txt`
 **Guideline:** The `tts_stop_name` field should include correct pronunciation for all stop names in `stops.txt` that are commonly mispronounced in trip-planning applications.
