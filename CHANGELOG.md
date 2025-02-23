@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Fixed validity definition for stops and trips. Consider wheelchair_accessible = 0 and wheelchair_boarding = 0 as missing
+
 ### Updated
 - Dependency Updates
 

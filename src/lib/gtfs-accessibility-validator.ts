@@ -8,7 +8,7 @@ import { formatPercent } from './formatters.js';
 
 const ccc = new ColorContrastChecker();
 
-interface IConfig {
+interface Config {
   sqlitePath?: string;
   ignoreDuplicates?: boolean;
   downloadTimeout?: number;
@@ -20,7 +20,7 @@ interface IConfig {
   skipImport?: boolean;
 }
 
-interface IRoute {
+interface Route {
   route_id: string;
   route_short_name?: string;
   route_long_name?: string;
@@ -28,29 +28,31 @@ interface IRoute {
   route_text_color?: string;
 }
 
-const validateTripsWithaccessibilityInfo = (config: IConfig) => {
+const validateTripsWithaccessibilityInfo = (config: Config) => {
   const db = openDb(config);
 
   const totalTripCount = db.prepare(`SELECT count(*) FROM trips`).get();
   const wheelchairAccessibleTripCount = db
     .prepare(
-      `SELECT count(*) FROM trips WHERE wheelchair_accessible IS NOT NULL`,
+      `SELECT count(*) FROM trips WHERE wheelchair_accessible IS NOT NULL AND wheelchair_accessible != 0`,
     )
     .get();
   return wheelchairAccessibleTripCount['count(*)'] / totalTripCount['count(*)'];
 };
 
-const validateStopsWithaccessibilityInfo = (config: IConfig) => {
+const validateStopsWithaccessibilityInfo = (config: Config) => {
   const db = openDb(config);
 
   const totalStopCount = db.prepare(`SELECT count(*) FROM stops`).get();
   const wheelchairAccessibleStopCount = db
-    .prepare(`SELECT count(*) FROM stops WHERE wheelchair_boarding IS NOT NULL`)
+    .prepare(
+      `SELECT count(*) FROM stops WHERE wheelchair_boarding IS NOT NULL AND wheelchair_boarding != 0`,
+    )
     .get();
   return wheelchairAccessibleStopCount['count(*)'] / totalStopCount['count(*)'];
 };
 
-const validateStopsWithTTS = (config: IConfig) => {
+const validateStopsWithTTS = (config: Config) => {
   const db = openDb(config);
 
   const totalStopCount = db.prepare(`SELECT count(*) FROM stops`).get();
@@ -60,24 +62,24 @@ const validateStopsWithTTS = (config: IConfig) => {
   return stopsWithTTSCount['count(*)'] / totalStopCount['count(*)'];
 };
 
-const validateLevels = (config: IConfig) => {
+const validateLevels = (config: Config) => {
   const db = openDb(config);
 
   const levels = db.prepare(`SELECT * FROM levels`).all();
   return levels.length > 0;
 };
 
-const validatePathways = (config: IConfig) => {
+const validatePathways = (config: Config) => {
   const db = openDb(config);
 
   const pathways = db.prepare(`SELECT * FROM pathways`).all();
   return pathways.length > 0;
 };
 
-const validateRouteColorContrast = (config: IConfig) => {
+const validateRouteColorContrast = (config: Config) => {
   const db = openDb(config);
 
-  const routes: IRoute[] = db
+  const routes: Route[] = db
     .prepare(
       `SELECT route_id, route_short_name, route_long_name, route_color, route_text_color FROM routes`,
     )
@@ -107,7 +109,7 @@ const validateRouteColorContrast = (config: IConfig) => {
 /*
  * Validate GTFS Accessibility
  */
-export const gtfsAccessibilityValidator = async (initialConfig: IConfig) => {
+export const gtfsAccessibilityValidator = async (initialConfig: Config) => {
   const config = setDefaultConfig(initialConfig);
   config.log = log(config);
   config.logWarning = logWarning(config);
