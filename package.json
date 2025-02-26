@@ -33,7 +33,7 @@
   "dependencies": {
     "cli-table": "^0.3.11",
     "color-contrast-checker": "^2.1.0",
-    "gtfs": "^4.15.14",
+    "gtfs": "^4.15.15",
     "lodash-es": "^4.17.21",
     "pretty-error": "^4.0.0",
     "yargs": "^17.7.2",
@@ -46,7 +46,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "prettier": "^3.5.2",
-    "tsup": "^8.3.6",
+    "tsup": "^8.4.0",
     "typescript": "^5.7.3"
   },
   "engines": {
