@@ -43,10 +43,14 @@ const validateTripsWithaccessibilityInfo = (config: Config) => {
 const validateStopsWithaccessibilityInfo = (config: Config) => {
   const db = openDb(config);
 
-  const totalStopCount = db.prepare(`SELECT count(*) FROM stops`).get();
+  const totalStopCount = db
+    .prepare(
+      `SELECT count(*) FROM stops WHERE location_type IS NULL OR location_type = 0 OR location_type = 1`,
+    )
+    .get();
   const wheelchairAccessibleStopCount = db
     .prepare(
-      `SELECT count(*) FROM stops WHERE wheelchair_boarding IS NOT NULL AND wheelchair_boarding != 0`,
+      `SELECT count(*) FROM stops WHERE wheelchair_boarding IS NOT NULL AND wheelchair_boarding != 0 AND (location_type IS NULL OR location_type = 0 OR location_type = 1)`,
     )
     .get();
   return wheelchairAccessibleStopCount['count(*)'] / totalStopCount['count(*)'];
