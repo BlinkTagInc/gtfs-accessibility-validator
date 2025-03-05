@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Updated
+- Dependency Updates
+
 ### Fixed
 - Fixed stop count to exclude stops where location_type is not missing, 0 or 1
 
