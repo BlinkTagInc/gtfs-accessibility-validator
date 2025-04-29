@@ -33,7 +33,7 @@
   "dependencies": {
     "cli-table": "^0.3.11",
     "color-contrast-checker": "^2.1.0",
-    "gtfs": "^4.17.2",
+    "gtfs": "^4.17.3",
     "lodash-es": "^4.17.21",
     "pretty-error": "^4.0.0",
     "yargs": "^17.7.2",
