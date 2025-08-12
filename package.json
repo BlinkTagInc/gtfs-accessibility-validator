@@ -1,6 +1,6 @@
 {
   "name": "gtfs-accessibility-validator",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Test GTFS for accessibility information",
   "keywords": [
     "transit",
@@ -33,21 +33,21 @@
   "dependencies": {
     "cli-table": "^0.3.11",
     "color-contrast-checker": "^2.1.0",
-    "gtfs": "^4.17.3",
+    "gtfs": "^4.17.7",
     "lodash-es": "^4.17.21",
     "pretty-error": "^4.0.0",
-    "yargs": "^17.7.2",
+    "yargs": "^18.0.0",
     "yoctocolors": "^2.1.1"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22",
+    "@types/node": "^24",
     "@types/yargs": "^17.0.33",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.1",
-    "prettier": "^3.5.3",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.3"
+    "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">= 20.11.0"

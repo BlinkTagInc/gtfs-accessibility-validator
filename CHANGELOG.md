@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Updated
+- Dependency Updates
+
+## [0.3.2] - 2025-04-29
+
+### Updated
 - Update GTFS exclude list
 - Dependency Updates
 
