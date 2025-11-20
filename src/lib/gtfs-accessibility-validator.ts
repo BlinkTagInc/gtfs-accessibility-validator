@@ -1,4 +1,10 @@
-import { openDb, importGtfs, getAgencies, getFeedInfo } from 'gtfs';
+import {
+  openDb,
+  importGtfs,
+  getAgencies,
+  getFeedInfo,
+  ConfigAgency,
+} from 'gtfs';
 import { compact } from 'lodash-es';
 // @ts-ignore
 import ColorContrastChecker from 'color-contrast-checker';
@@ -136,42 +142,43 @@ export const gtfsAccessibilityValidator = async (initialConfig: Config) => {
   }
 
   if (!config.skipImport) {
-    // Import GTFS
+    const exclude: ConfigAgency['exclude'] = [
+      'areas',
+      'attributions',
+      'booking_rules',
+      'calendar_dates',
+      'calendar',
+      'fare_attributes',
+      'fare_leg_join_rules',
+      'fare_leg_rules',
+      'fare_media',
+      'fare_products',
+      'fare_rules',
+      'fare_transfer_rules',
+      'frequencies',
+      'location_group_stops',
+      'location_groups',
+      'locations',
+      'networks',
+      'rider_categories',
+      'route_networks',
+      'shapes',
+      'stop_areas',
+      'stop_times',
+      'timeframes',
+      'transfers',
+      'translations',
+    ];
+
+    const agencies: ConfigAgency[] = [
+      config.gtfsPath
+        ? { path: config.gtfsPath, exclude }
+        : { url: config.gtfsUrl!, exclude },
+    ];
+
     await importGtfs({
       ...config,
-      agencies: [
-        {
-          path: config.gtfsPath,
-          url: config.gtfsUrl,
-          exclude: [
-            'areas',
-            'attributions',
-            'booking_rules',
-            'calendar_dates',
-            'calendar',
-            'fare_attributes',
-            'fare_leg_join_rules',
-            'fare_leg_rules',
-            'fare_media',
-            'fare_products',
-            'fare_rules',
-            'fare_transfer_rules',
-            'frequencies',
-            'location_group_stops',
-            'location_groups',
-            'locations',
-            'networks',
-            'rider_categories',
-            'route_networks',
-            'shapes',
-            'stop_areas',
-            'stop_times',
-            'timeframes',
-            'transfers',
-            'translations',
-          ],
-        },
-      ],
+      agencies,
     });
   }
 

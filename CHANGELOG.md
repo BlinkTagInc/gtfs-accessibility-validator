@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 - Dependency Updates
 
+### Fixed
+- Fix for specifying GTFS via `gtfsPath` command line argument.
+
 ## [0.3.3] - 2025-08-12
 
 ### Updated
