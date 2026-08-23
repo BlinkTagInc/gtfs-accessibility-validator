@@ -19,7 +19,7 @@ interface Config {
   ignoreDuplicates?: boolean;
   downloadTimeout?: number;
   ignoreErrors?: boolean;
-  verbose?: boolean;
+  logLevel?: string;
   logFunction?: (text: string, overwrite?: boolean) => void;
   gtfsPath?: string;
   gtfsUrl?: string;

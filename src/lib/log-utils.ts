@@ -7,7 +7,7 @@ import Table from 'cli-table';
  * Returns a log function based on config settings
  */
 export function log(config) {
-  if (config.verbose === false) {
+  if (config.logLevel === 'silent') {
     return noop;
   }
 
