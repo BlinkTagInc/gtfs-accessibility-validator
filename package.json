@@ -1,7 +1,7 @@
 {
   "name": "gtfs-accessibility-validator",
   "version": "0.4.0",
-  "description": "Test GTFS for accessibility information",
+  "description": "Validate accessibility information in GTFS Schedule feeds.",
   "keywords": [
     "transit",
     "gtfs",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/blinktaginc/gtfs-accessibility-validator.git"
+    "url": "git+https://github.com/BlinkTagInc/gtfs-accessibility-validator.git"
   },
   "license": "MIT",
   "author": "Brendan Nee <brendan@blinktag.com>",
@@ -21,36 +21,43 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "CHANGELOG.md",
+    "dist",
+    "docs",
+    "config-sample.json",
+    "config-sample-full.json"
   ],
   "bin": {
     "gtfs-accessibility-validator": "dist/bin/gtfs-accessibility-validator.js"
   },
   "scripts": {
-    "prepare": "husky",
     "build": "tsdown",
-    "test": "pnpm run build && node --test test/*.test.js",
-    "typecheck": "tsc --noEmit"
+    "build-watch": "tsdown --watch",
+    "test": "pnpm run build && node --test test/integration/*.test.js test/unit/*.test.js",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "node .husky/install.mjs",
+    "prepack": "npm run build",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "test:release": "pnpm run build && node --test test/package/*.test.js"
   },
   "dependencies": {
-    "cli-table": "^0.3.11",
-    "color-contrast-checker": "^2.1.0",
-    "gtfs": "5.0.0-beta.0",
-    "lodash-es": "^4.18.1",
-    "pretty-error": "^4.0.0",
-    "yargs": "^18.2.0",
-    "yoctocolors": "^2.2.0"
+    "gtfs": "5.0.0-beta.0"
   },
   "devDependencies": {
-    "@types/cli-table": "^0.3.4",
-    "@types/lodash-es": "^4.17.12",
     "@types/node": "^26",
-    "@types/yargs": "^17.0.35",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
     "tsdown": "^0.23.7",
-    "typescript": "^7.0.2"
+    "typescript": "7.1.0-beta",
+    "oxlint": "1.93.0",
+    "release-it": "^21.1.2",
+    "@release-it/keep-a-changelog": "^8.0.1",
+    "publint": "^0.3.25",
+    "@arethetypeswrong/core": "^0.18.5"
   },
   "engines": {
     "node": "^22.18.0 || >=24.0.0"
@@ -65,16 +72,42 @@
       }
     },
     "hooks": {
-      "after:bump": "npm run build"
+      "before:init": [
+        "pnpm run lint",
+        "pnpm run format:check",
+        "pnpm run typecheck",
+        "pnpm test",
+        "pnpm run test:release"
+      ],
+      "after:bump": "pnpm run build"
+    },
+    "git": {
+      "requireBranch": "main",
+      "requireCommits": true,
+      "commitMessage": "Release ${version}",
+      "tagName": "${version}"
+    },
+    "npm": {
+      "publish": true,
+      "publishPackageManager": "pnpm",
+      "publishArgs": [
+        "--no-git-checks"
+      ]
     }
   },
   "prettier": {
     "singleQuote": true
   },
   "lint-staged": {
-    "*.js": "prettier --write",
-    "*.ts": "prettier --write",
-    "*.json": "prettier --write"
+    "*.{js,mjs,ts,json,md,yml,yaml}": "prettier --write"
   },
-  "packageManager": "pnpm@12.18.0"
+  "packageManager": "pnpm@12.18.0",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  }
 }

@@ -1,61 +1,10 @@
 #!/usr/bin/env node
 
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-import PrettyError from 'pretty-error';
-import { isNil, omitBy } from 'lodash-es';
+import { runCli } from '../cli/command.ts';
 
-import { formatError } from '../lib/log-utils.js';
-import gtfsAccessibilityValidator from '../index.js';
-
-const pe = new PrettyError();
-
-const argv = yargs(hideBin(process.argv))
-  .usage('Usage: $0 --gtfsPath /path/to/gtfs.zip')
-  .help()
-  .option('gtfsPath', {
-    describe: 'Path to gtfs (zipped or unzipped)',
-    type: 'string',
-  })
-  .option('gtfsUrl', {
-    describe: 'URL of gtfs file',
-    type: 'string',
-  })
-  .option('sourceId', {
-    describe: 'Stable feed identity within the v5 database',
-    type: 'string',
-    default: 'default',
-  })
-  .option('s', {
-    alias: 'skipImport',
-    describe: 'Don’t import GTFS file.',
-    type: 'boolean',
-  })
-  .default('skipImport', undefined)
-  .option('sqlitePath', {
-    describe: 'Path to SQLite database',
-    type: 'string',
-  })
-  .default('sqlitePath', undefined)
-  .parseSync();
-
-const handleError = (error: any) => {
-  const text = error || 'Unknown Error';
-  process.stdout.write(`\n${formatError(text)}\n`);
-  console.error(pe.render(error));
-  process.exit(1);
-};
-
-const setupImport = async () => {
-  const config = {
-    sourceId: argv.sourceId,
-    gtfsPath: argv.gtfsPath,
-    gtfsUrl: argv.gtfsUrl,
-    sqlitePath: argv.sqlitePath,
-    skipImport: argv.skipImport,
-  };
-  await gtfsAccessibilityValidator(omitBy(config, isNil));
-  process.exit();
-};
-
-setupImport().catch(handleError);
+runCli(process.argv.slice(2)).catch((error: unknown) => {
+  process.stderr.write(
+    `Error: ${error instanceof Error ? error.message : String(error)}\n`,
+  );
+  process.exitCode = 1;
+});

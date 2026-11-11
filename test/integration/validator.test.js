@@ -3,9 +3,48 @@ import { test } from 'node:test';
 import { mkdtemp, cp, readFile, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { execFileSync } from 'node:child_process';
 import { Gtfs } from 'gtfs';
-import validate from '../dist/index.js';
+import { validateAccessibility } from '../../dist/index.js';
+
+// Translate historical fixture calls to exercise the new public API.
+async function validate({
+  gtfsPath,
+  sqlitePath,
+  sourceId = 'default',
+  skipImport,
+  ignoreDuplicates,
+  ...rest
+}) {
+  const result = await validateAccessibility({
+    database: { path: sqlitePath ?? ':memory:' },
+    sources: [
+      {
+        sourceId,
+        ...(skipImport
+          ? {}
+          : {
+              schedule: {
+                path: gtfsPath,
+                ...(ignoreDuplicates
+                  ? { import: { validation: { onDuplicateKey: 'keep-first' } } }
+                  : {}),
+              },
+            }),
+      },
+    ],
+    accessibility: { input: skipImport ? 'database' : 'schedule' },
+    reporting: { level: 'silent' },
+    ...(rest.ignoreErrors ? { ignoreErrors: true } : {}),
+  });
+  const source = result.sources[0];
+  return {
+    stats: source.checks,
+    agency: source.agencies.join(', '),
+    feed_version: source.feedInfo.map((feed) => feed.version).join(', '),
+    feed_start_date: source.feedInfo.map((feed) => feed.startDate).join(', '),
+    feed_end_date: source.feedInfo.map((feed) => feed.endDate).join(', '),
+  };
+}
 
 const fixture = resolve('test/fixtures/accessibility');
 const expected = JSON.parse(
@@ -31,7 +70,7 @@ test('in-memory report exactly matches the captured v4 result', async () => {
 });
 
 test('persistent import, close, and reopen preserve the report', async (t) => {
-  const sqlitePath = join(await temporary(t), 'v5.sqlite');
+  const sqlitePath = join(await temporary(t), 'gtfs.sqlite');
   assert.deepEqual(await validate({ ...options, sqlitePath }), expected);
   assert.deepEqual(
     await validate({ sqlitePath, skipImport: true, logLevel: 'silent' }),
@@ -41,7 +80,7 @@ test('persistent import, close, and reopen preserve the report', async (t) => {
 
 test('overlapping IDs in a shared database stay source scoped', async (t) => {
   const { directory, feed } = await variant(t);
-  const sqlitePath = join(directory, 'v5.sqlite');
+  const sqlitePath = join(directory, 'gtfs.sqlite');
   await writeFile(
     join(feed, 'agency.txt'),
     (await readFile(join(feed, 'agency.txt'), 'utf8')).replace(
@@ -95,8 +134,8 @@ test('missing optional data and empty denominators keep existing fallbacks', asy
   assert.deepEqual(
     result.stats.slice(0, 5).map(({ value, status }) => [value, status]),
     [
-      ['', 'fail'],
-      ['', 'fail'],
+      ['n/a', 'not-applicable'],
+      ['n/a', 'not-applicable'],
       ['no', 'fail'],
       ['no', 'fail'],
       ['no', 'fail'],
@@ -109,7 +148,7 @@ test('missing optional data and empty denominators keep existing fallbacks', asy
 
 test('duplicate policy translates and a failed replacement preserves old data', async (t) => {
   const { directory, feed } = await variant(t);
-  const sqlitePath = join(directory, 'v5.sqlite');
+  const sqlitePath = join(directory, 'gtfs.sqlite');
   await validate({ ...options, sqlitePath });
   await writeFile(
     join(feed, 'trips.txt'),
@@ -137,7 +176,7 @@ test('owned instances close on successful and failed operations', async (t) => {
   await assert.rejects(
     validate({ ...options, gtfsPath: '/nonexistent/accessibility-feed.zip' }),
   );
-  assert.equal(closes, 2);
+  assert.equal(closes, 3);
 });
 
 test('unsuccessful import results never produce accessibility output', async (t) => {
@@ -153,39 +192,10 @@ test('unsuccessful import results never produce accessibility output', async (t)
 test('unsupported legacy settings and memory reuse fail clearly', async () => {
   await assert.rejects(
     validate({ ...options, ignoreErrors: true }),
-    /no equivalent/,
+    /Unknown configuration/,
   );
   await assert.rejects(
     validate({ skipImport: true }),
-    /persistent v5 sqlitePath/,
+    /persistent database.path/,
   );
-});
-
-test('CLI imports and reopens a named source with the same report', async (t) => {
-  const sqlitePath = join(await temporary(t), 'v5.sqlite');
-  const cli = 'dist/bin/gtfs-accessibility-validator.js';
-  const imported = execFileSync(
-    process.execPath,
-    [
-      cli,
-      '--gtfsPath',
-      fixture,
-      '--sqlitePath',
-      sqlitePath,
-      '--sourceId',
-      'cli',
-    ],
-    { encoding: 'utf8' },
-  );
-  const reopened = execFileSync(
-    process.execPath,
-    [cli, '--skipImport', '--sqlitePath', sqlitePath, '--sourceId', 'cli'],
-    { encoding: 'utf8' },
-  );
-  for (const output of [imported, reopened]) {
-    assert.match(output, /50%/);
-    assert.match(output, /66\.7%/);
-    assert.match(output, /Agency: Fixture Transit/);
-    assert.match(output, /Feed Start Date: 20260101/);
-  }
 });

@@ -8,3 +8,8 @@
 
 # Build files
 /dist
+*.sqlite
+*.sqlite-*
+*.tgz
+config.json
+.DS_Store

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Prepare 1.0: adopt node-GTFS v5 nested configuration, named `validateAccessibility` API, and source-scoped results.
+- Replace legacy flags with `--input`, `--url`, `--database`, `--source-id`, and `--from-database`; add JSON config and output.
+- Use structured reporting, silent library calls, stderr diagnostics, and documented CLI exit codes.
+- Import complete schedules by default; support v5 database clients and import policies.
+- Restructure source, tests, build, package exports, and release tooling; add CI and configuration documentation.
+
+### Fixed
+
+- Reject invalid wheelchair values as accessibility information.
+- Treat empty trip/stop denominators as not applicable and ignore blank TTS names.
+- Apply GTFS default colors before checking contrast; reject malformed colors.
+- Reject missing database sources and unknown/legacy configuration instead of generating misleading reports.
+
 ## [0.4.0] - 2026-11-10
 
 ### Updated

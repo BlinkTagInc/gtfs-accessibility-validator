@@ -1,0 +1,57 @@
+{
+  "database": {
+    "path": "./gtfs.sqlite",
+    "durability": "safe"
+  },
+  "reporting": {
+    "level": "info"
+  },
+  "extensions": [],
+  "sources": [
+    {
+      "sourceId": "remote-transit",
+      "schedule": {
+        "url": "https://example.com/remote-feed/gtfs.zip",
+        "requestHeaders": {
+          "Authorization": "Bearer replace-with-your-token"
+        },
+        "timeoutMs": 60000,
+        "excludeFiles": ["shapes.txt"],
+        "defaultAgencyId": "remote-transit",
+        "import": {
+          "archive": {
+            "maxCompressedBytes": 1073741824,
+            "maxEntries": 1000,
+            "maxExtractedFileBytes": 4294967296,
+            "maxExtractedTotalBytes": 8589934592
+          },
+          "csv": {
+            "delimiter": ",",
+            "encoding": "utf8",
+            "escape": "\"",
+            "quote": "\"",
+            "relaxQuotes": true,
+            "skipEmptyLines": true,
+            "trim": true
+          },
+          "onExistingData": "replace-source",
+          "onSourceError": "abort",
+          "validation": {
+            "mode": "off",
+            "onDuplicateKey": "reject",
+            "onUnknownField": "preserve"
+          }
+        }
+      }
+    },
+    {
+      "sourceId": "local-transit",
+      "schedule": {
+        "path": "./data/local-gtfs.zip"
+      }
+    }
+  ],
+  "accessibility": {
+    "input": "schedule"
+  }
+}

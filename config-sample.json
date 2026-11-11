@@ -1,0 +1,9 @@
+{
+  "sources": [
+    {
+      "schedule": {
+        "path": "./gtfs.zip"
+      }
+    }
+  ]
+}
