@@ -1,0 +1,5 @@
+route_id,service_id,trip_id,wheelchair_accessible
+01,d,t1,1
+02,d,t2,2
+03,d,t3,0
+03,d,t4,

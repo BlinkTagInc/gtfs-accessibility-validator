@@ -1,3 +1,5 @@
+import type { Config } from './types.js';
+
 import { clearLine, cursorTo } from 'node:readline';
 import { noop } from 'lodash-es';
 import * as colors from 'yoctocolors';
@@ -6,7 +8,7 @@ import Table from 'cli-table';
 /*
  * Returns a log function based on config settings
  */
-export function log(config) {
+export function log(config: Config) {
   if (config.logLevel === 'silent') {
     return noop;
   }
@@ -15,12 +17,10 @@ export function log(config) {
     return config.logFunction;
   }
 
-  return (text, overwrite) => {
+  return (text: string, overwrite?: boolean) => {
     if (overwrite === true && process.stdout.isTTY) {
       clearLine(process.stdout, 0);
       cursorTo(process.stdout, 0);
-    } else {
-      process.stdout.write('\n');
     }
 
     process.stdout.write(`${text}\n`);
@@ -30,12 +30,12 @@ export function log(config) {
 /*
  * Returns an warning log function based on config settings
  */
-export function logWarning(config) {
+export function logWarning(config: Config) {
   if (config.logFunction) {
     return config.logFunction;
   }
 
-  return (text) => {
+  return (text: string) => {
     process.stdout.write(`\n${formatWarning(text)}\n`);
   };
 }
@@ -43,12 +43,12 @@ export function logWarning(config) {
 /*
  * Returns an error log function based on config settings
  */
-export function logError(config) {
+export function logError(config: Config) {
   if (config.logFunction) {
     return config.logFunction;
   }
 
-  return (text) => {
+  return (text: string) => {
     process.stdout.write(`\n${formatError(text)}\n`);
   };
 }
@@ -56,7 +56,7 @@ export function logError(config) {
 /*
  * Format console warning text
  */
-export function formatWarning(text) {
+export function formatWarning(text: string) {
   const warningMessage = `${colors.underline('Warning')}: ${text}`;
   return colors.yellow(warningMessage);
 }
@@ -64,7 +64,7 @@ export function formatWarning(text) {
 /*
  * Format console error text
  */
-export function formatError(error) {
+export function formatError(error: string | Error) {
   const messageText = error instanceof Error ? error.message : error;
   const errorMessage = `${colors.underline('Error')}: ${messageText.replace(
     'Error: ',
@@ -76,7 +76,10 @@ export function formatError(error) {
 /*
  * Print a table of stats to the console.
  */
-export function logStats(stats, config) {
+export function logStats(
+  stats: { status: string; name: string; value: string }[],
+  config: Config & { log: (text: string) => void },
+) {
   // Hide stats table from custom log functions
   if (config.logFunction) {
     return;
@@ -101,5 +104,5 @@ export function logStats(stats, config) {
     table.push([formatStatus(stat.status), stat.name, stat.value]);
   }
 
-  config.log(table.toString());
+  config.log(`\n${table.toString()}`);
 }

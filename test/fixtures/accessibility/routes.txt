@@ -1,0 +1,4 @@
+route_id,agency_id,route_short_name,route_long_name,route_type,route_color,route_text_color
+01,a,1,Low contrast,3,FFFFFF,EEEEEE
+02,a,2,Good contrast,3,FFFFFF,000000
+03,a,3,Missing colors,3,,

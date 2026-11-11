@@ -1,0 +1,53 @@
+{
+  "stats": [
+    {
+      "id": "tripsWithWheelchairAccessibility",
+      "name": "Percentage of trips with wheelchair accessibility info",
+      "value": "50%",
+      "status": "fail"
+    },
+    {
+      "id": "stopsWithWheelchairBoarding",
+      "name": "Percentage of stops with wheelchair boarding info",
+      "value": "66.7%",
+      "status": "fail"
+    },
+    {
+      "id": "stopsWithTTSStopName",
+      "name": "Stops have text-to-speech value",
+      "value": "yes",
+      "status": "pass"
+    },
+    {
+      "id": "hasLevels",
+      "name": "Has levels info",
+      "value": "yes",
+      "status": "pass"
+    },
+    {
+      "id": "hasPathways",
+      "name": "Has pathways info",
+      "value": "yes",
+      "status": "pass"
+    },
+    {
+      "id": "routeColorContrastIsValid",
+      "name": "Routes with invalid color contrast",
+      "value": "1 routes",
+      "status": "fail",
+      "routes": [
+        {
+          "route_id": "01",
+          "route_short_name": "1",
+          "route_long_name": "Low contrast",
+          "route_color": "FFFFFF",
+          "route_text_color": "EEEEEE"
+        }
+      ]
+    }
+  ],
+  "agency": "Fixture Transit",
+  "feed_version": "v1",
+  "feed_start_date": "20260101",
+  "feed_end_date": "20261231"
+}

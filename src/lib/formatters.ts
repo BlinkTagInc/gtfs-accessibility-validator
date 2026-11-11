@@ -1,4 +1,4 @@
-export const formatPercent = (ratio) => {
+export const formatPercent = (ratio: number | undefined) => {
   if (ratio === undefined || isNaN(ratio)) {
     return '';
   }

@@ -1,0 +1,5 @@
+stop_id,stop_name,stop_lat,stop_lon,location_type,wheelchair_boarding,tts_stop_name,parent_station,level_id
+s,Station,37,-122,1,1,Station,,l
+a,Platform A,37,-122,0,2,,s,l
+b,Platform B,37.001,-122.001,,0,,s,l
+e,Entrance,37,-122,2,,,s,l

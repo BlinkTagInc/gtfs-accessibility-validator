@@ -21,6 +21,11 @@ const argv = yargs(hideBin(process.argv))
     describe: 'URL of gtfs file',
     type: 'string',
   })
+  .option('sourceId', {
+    describe: 'Stable feed identity within the v5 database',
+    type: 'string',
+    default: 'default',
+  })
   .option('s', {
     alias: 'skipImport',
     describe: 'Don’t import GTFS file.',
@@ -43,6 +48,7 @@ const handleError = (error: any) => {
 
 const setupImport = async () => {
   const config = {
+    sourceId: argv.sourceId,
     gtfsPath: argv.gtfsPath,
     gtfsUrl: argv.gtfsUrl,
     sqlitePath: argv.sqlitePath,
