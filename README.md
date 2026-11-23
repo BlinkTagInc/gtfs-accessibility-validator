@@ -6,7 +6,7 @@ Reliable accessibility information helps riders with disabilities plan transit t
 
 Check accessibility information in GTFS Schedule feeds with [node-GTFS](https://github.com/BlinkTagInc/node-gtfs). Use a local ZIP, an extracted directory, a URL, or an existing database. Each source gets an independent report.
 
-Requires Node.js 22.18+, 24, or later supported versions. ESM only.
+Requires Node.js 24.22.3 or later. ESM only.
 
 ## Quick start
 
