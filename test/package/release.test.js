@@ -37,7 +37,7 @@ test('packed package contains runnable ESM, CLI, types and public documentation'
   await writeFile(join(directory, 'package.json'), '{"private":true}');
   await writeFile(
     join(directory, '.npmrc'),
-    'min-release-age-exclude[]=gtfs@5.0.0-beta.2\n',
+    'min-release-age-exclude[]=gtfs\nmin-release-age-exclude[]=gtfs-realtime-bindings\n',
   );
   execFileSync(
     'npm',
