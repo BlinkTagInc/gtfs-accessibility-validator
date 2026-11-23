@@ -1,6 +1,6 @@
 {
   "name": "gtfs-accessibility-validator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validate accessibility information in GTFS Schedule feeds.",
   "keywords": [
     "transit",
